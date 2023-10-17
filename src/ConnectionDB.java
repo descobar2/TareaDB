@@ -1,4 +1,10 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class ConnectionDB {
     public static void main(String[] args) throws SQLException {
@@ -6,7 +12,7 @@ public class ConnectionDB {
         final String DB_URL = String.format("jdbc:mysql://%s", HOST);
         final Connection con = DriverManager.getConnection(DB_URL,"progra","Guate2021+");
         final Statement stmt = con.createStatement();
-
+        
         System.out.println("\nDatos originales");
         showTable(con,stmt);
 
@@ -57,18 +63,28 @@ public class ConnectionDB {
             e.printStackTrace();
         }
     }
-    public static void showTable(Connection con, Statement stmt){
+    public static ArrayList<Datos> showTable(Connection con, Statement stmt){
+        ArrayList<Datos> datos = new ArrayList<Datos>();
         try{
             String sql = "SELECT * FROM Tarea.Proveedor;";
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs =ps.executeQuery(sql);
 
             while(rs.next()){
-                System.out.print(rs.getString("ProveedorID") +"\t"+ rs.getString("Nombre")+"\t");
-                System.out.println(rs.getString("Direccion") +"\t"+ rs.getString("Telefono"));
+                Datos p = new Datos();
+                p.setId(rs.getString("ProveedorID"));
+                p.setNombre(rs.getString("Nombre"));
+                p.setDireccion(rs.getString("Direccion"));
+                p.setTelefono(rs.getString("Telefono"));
+                datos.add(p);
+            }
+            for (Datos p : datos){
+                System.out.println(p.getId() + "\t" + p.getNombre()  + "\t" + p.getDireccion() + "\t" + p.getTelefono());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    return datos;
     }
 }
