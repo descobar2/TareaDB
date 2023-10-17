@@ -35,7 +35,7 @@ public class ConnectionDB {
             ps.setInt(1,4);
             ps.setString(2, "Allan");
             ps.setString(3, "Guatemala");
-            ps.setString(4, "24280000");
+            ps.setString(4, "24282428");
             ps.executeUpdate();
 
         }catch(SQLException e){
